@@ -17,6 +17,11 @@ export default function QuizRoutes(app) {
         res.json(quizzes);
     });
 
+    app.get("/api/quizzes/:qid", async (req, res) => {
+        const quiz = await dao.findQuizById(req.params.qid);
+        res.json(quiz);
+    });
+
     // Update a quiz
     app.put("/api/quizzes/:qid", async (req, res) => {
         const quizId = req.params.qid;
@@ -95,6 +100,29 @@ export default function QuizRoutes(app) {
             res.status(404).send("No question found with provided ID.");
         } else {
             res.sendStatus(204);
+        }
+    });
+
+    // Update a question
+    app.put("/api/questions/:qid", async (req, res) => {
+        const questionId = req.params.qid;
+        console.log(`Received request to update question with ID: ${questionId}`);
+        console.log('Request payload:', req.body);
+        
+        try {
+            const updated = await dao.updateQuestion(questionId, req.body);
+            console.log(`Result of database update operation:`, updated);
+        
+            if (updated.modifiedCount === 0) {
+                console.log(`No question found with ID: ${questionId}`);
+                return res.status(404).send("No question found with provided ID.");
+            }
+        
+            console.log(`Question with ID: ${questionId} updated successfully.`);
+            res.sendStatus(204);
+        } catch (error) {
+            console.error(`Error occurred while updating question with ID: ${questionId}`, error);
+            res.status(500).json({ message: error.message });
         }
     });
 

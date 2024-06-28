@@ -8,7 +8,7 @@ export const createQuiz = async (quizData) => {
 
 // Find all quizzes
 export const findAllQuizzes = async () => {
-  return await QuizModel.find();
+  return await QuizModel.find().populate('questions');
 };
 
 // Find a quiz by ID
@@ -57,6 +57,11 @@ export const deleteQuestion = async (questionId) => {
     await QuizModel.updateMany({}, { $pull: { questions: questionId } });
   }
   return result;
+};
+
+// Update a question
+export const updateQuestion = async (questionId, questionData) => {
+  return await QuestionModel.updateOne({ _id: questionId }, { $set: questionData });
 };
 
 // Create a quiz attempt

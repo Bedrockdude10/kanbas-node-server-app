@@ -34,18 +34,18 @@ const quizSchema = new mongoose.Schema({
     availableDate: { type: Date, required: false },
     untilDate: { type: Date, required: false },
     published: { type: Boolean, default: false },
-    questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Question' }]
+    questions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'QuestionModel' }]
 }, {
     collection: "quizzes"
 });
 
 // Define the Answer Schema
 const answerSchema = new mongoose.Schema({
-    quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'Quiz', required: true },
+    quiz: { type: mongoose.Schema.Types.ObjectId, ref: 'QuizModel', required: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     attempt: { type: Number, required: true },
     answers: [{
-        question: { type: mongoose.Schema.Types.ObjectId, ref: 'Question', required: true },
+        question: { type: mongoose.Schema.Types.ObjectId, ref: 'QuestionModel', required: true },
         answer: [String] // Array to handle multiple choice and fill in the blanks answers
     }],
     score: { type: Number, required: false },
